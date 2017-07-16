@@ -22,7 +22,11 @@ var add_question = function(req, res, next){
 }
 
 var getAllquestion = function(req, res, next) {
-  question_model.find({}, function(err, result) {
+  question_model.find({})
+  .populate('creator')
+  .populate('answers')
+  .populate({path: 'name', select: 'name'})
+  .exec(function(err, result) {
     if(!err) res.send(result)
     else console.log(err);
   })
@@ -30,9 +34,20 @@ var getAllquestion = function(req, res, next) {
 
 var getQeustionById = function(req, res, next) {
   let id = req.params._id
-  question_model.findById({_id: id}, function(err, result) {
+  question_model.findById({_id:id})
+  .populate('creator')
+  .populate({path: 'name', select: 'name'})
+  .populate('answers')
+  .populate({
+    path: 'answers',
+    populate: {
+      path: 'creator',
+      model: 'User'
+    }
+  })
+  .exec(function(err, result) {
     if(!err) res.send(result)
-    else res.send(err)
+    else console.log(err);
   })
 }
 
