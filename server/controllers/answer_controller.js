@@ -35,7 +35,18 @@ var add_answer = function(req, res, next){
 }
 
 var getAllanswer = function(req, res, next) {
-  answer_model.find({}, function(err, result) {
+  answer_model.find({})
+    .populate('creator')
+    .populate({path: 'name', select: 'name'})
+    .exec(function(err, result) {
+      if(!err) res.send(result)
+      else console.log(err);
+    })
+}
+
+var getAnswerByParent = function(req, res) {
+  let id = req.params._id
+  answer_model.findById({_id:id}, function(err, result) {
     if(!err) res.send(result)
     else console.log(err);
   })
@@ -128,6 +139,6 @@ module.exports = {
   delete_answer,
   getAllanswer,
   add_answer,
-  getAnswerById
-
+  getAnswerById,
+  getAnswerByParent
 }
