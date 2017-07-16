@@ -17,6 +17,8 @@ router.delete('/:_id', auth.userInfo, questionController.delete_question) //done
 router.put('/:_id', auth.userInfo, questionController.update_question) //done
 
 // -------------------------------------------------
+router.get('/:_id/answer', auth.userInfo, answerController.getAllanswer)  //done get answers
+router.get('/:_id/answer/:_id', auth.userInfo, answerController.getAnswerByParent)  //done get answers
 router.post('/:_id/answer', auth.userInfo, answerController.add_answer)  //done post answers
 
 router.get('/:_id/answer/:_id', answerController.getAnswerById)// id
