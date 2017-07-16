@@ -16,7 +16,7 @@ var signIn = function(req, res, next) {
       .then(result => {
         if(result) {
           var token = jwt.sign({id: user._id, name: user.name, email: user.email }, process.env.SECRET);
-          res.send({token, name: user.name, email: user.email })
+          res.send({token, id: user._id, name: user.name, email: user.email })
         } else {
           res.send({ msg: 'Incorrect password' });
         }
