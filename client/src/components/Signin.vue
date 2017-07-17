@@ -33,7 +33,7 @@
 
       <div class="field is-grouped">
         <div class="column is-12">
-          <button type="button" class="button is-primary" name="button" @click="doLogin()">Sign Up</button>
+          <button type="button" class="button is-primary" name="button" @click="doLogin()">Sign In</button>
         </div>
       </div>
   </div>
