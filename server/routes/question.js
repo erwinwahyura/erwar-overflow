@@ -27,7 +27,7 @@ router.get('/:_id/answer/:_id', answerController.getAnswerById)// id
 router.put('/:_id/answer/:_id/upvote', auth.userInfo, answerController.upvote) //done answer up
 router.put('/:_id/answer/:_id/downvote', auth.userInfo, answerController.downvote) //done answers down
 //
-router.delete('/:_id/answers/:_id', auth.userInfo, answerController.delete_answer) //done
+router.delete('/:_id/answer/:_id', auth.userInfo, answerController.delete_answer) //done
 
 
 

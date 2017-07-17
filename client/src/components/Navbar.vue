@@ -2,7 +2,7 @@
   <header>
     <nav class="navbar" v-if="islogin">
 
-      <router-link class="navbar-item " to="/"><img src="http://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28"></router-link>
+      <router-link class="navbar-item " to="/"><img src="https://s3-ap-southeast-1.amazonaws.com/erwar-todo/download+(3).png" alt="erwar" width="112" height="28"></router-link>
 
       <router-link class="navbar-item " to="/">Developer Jobs</router-link>
 
@@ -36,7 +36,7 @@
     </nav>
     <nav class="navbar" v-else>
 
-      <router-link class="navbar-item " to="/"><img src="http://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28"></router-link>
+      <router-link class="navbar-item " to="/"><img src="https://s3-ap-southeast-1.amazonaws.com/erwar-todo/download+(3).png" alt="erwar"></router-link>
 
       <router-link class="navbar-item " to="/">Developer Jobs</router-link>
 
@@ -77,14 +77,22 @@ export default {
     Signup,
     AllContent
   },
+  watch: {
+    '$route' (to, from) {
+      this.setName()
+    }
+  },
   created () {
-    this.name = localStorage.getItem('name')
+    this.setName()
   },
   methods: {
     logout () {
       console.log('hi logout')
       localStorage.clear()
       this.$router.push('/')
+    },
+    setName () {
+      this.name = localStorage.getItem('name')
     }
   }
 }

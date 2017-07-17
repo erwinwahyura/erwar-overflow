@@ -61,7 +61,7 @@ var getAnswerById = function(req, res) {
 }
 //method deleteOne can also use remove, deleteOne with promise .then / callback and deleteMany
 var delete_answer = function(req, res, next) {
-  answer_model.deleteOne({_id:req.params.id}, function(err, result) {
+  answer_model.deleteOne({_id:req.params._id}, function(err, result) {
     if(!err) res.send("success deleted")
     else res.send(err)
   })
@@ -81,15 +81,15 @@ var update_answer = function(req, res, next) {
 }
 
 var upvote = function(req, res) {
-  console.log('hi ini upvote');
+  // console.log('hi ini upvote');
   let id = req.params._id
-  console.log('hi ini id ',id);
+  // console.log('hi ini id ',id);
   answer_model.findById({_id:id}, function(err, result) {
-    console.log('ini resultnya --> : ',result);
-    console.log('1---',result.creator);
-    console.log('2---',req.body.creator);
+    // console.log('ini resultnya --> : ',result);
+    // console.log('1---',result.creator);
+    // console.log('2---',req.body.creator);
     if (result._id && req.body.creator) {
-      console.log('masuk');
+      // console.log('masuk');
       var index_up = result.upvotes.indexOf(req.body.creator)
       var index_down = result.downvotes.indexOf(req.body.creator)
       if (index_up == -1 && index_down == -1) {
@@ -111,18 +111,18 @@ var downvote = function(req, res) {
   answer_model.findById(req.params._id, function(err, result) {
     console.log(result);
     if (req.body.creator) {
-      console.log('-===========================-7');
-      console.log('ini id yg mau vote : ', req.body.creator);
+      // console.log('-===========================-7');
+      // console.log('ini id yg mau vote : ', req.body.creator);
       var index_up = result.upvotes.indexOf(req.body.creator)
-      console.log('cek index up ', index_up);
+      // console.log('cek index up ', index_up);
       var index_down = result.downvotes.indexOf(req.body.creator)
-      console.log('cek index down ', index_down);
+      // console.log('cek index down ', index_down);
       if (index_up == -1 && index_down == -1) {
         result.downvotes.push(req.body.creator)
-        console.log(result.downvotes);
+        // console.log(result.downvotes);
       } else if (index_up !== -1) {
         result.upvotes.splice(index_down, 1)
-        console.log(result.upvotes);
+        // console.log(result.upvotes);
       }
       result.save(function(err, updated_result) {
         if (!err) res.send(updated_result)

@@ -143,9 +143,6 @@ label {
   padding-right: 50px;
   padding-bottom: 50px;
 }
-button.column.is-12.button.is-primary {
-    width: 653%;
-}
 .columns.content-full {
   position: relative;
   top: 14px;

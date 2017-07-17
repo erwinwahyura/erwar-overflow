@@ -1,11 +1,11 @@
 <template lang="html">
   <div class="container">
     <article class="media">
-      <figure class="media-left">
+      <!-- <figure class="media-left">
         <p class="image is-64x64">
           <img src="http://bulma.io/images/placeholders/128x128.png">
         </p>
-      </figure>
+      </figure> -->
       <div class="media-content">
         <div class="field">
           <p class="control">
@@ -16,13 +16,10 @@
           <div class="level-left">
             <div class="level-item">
               <a class="button is-info" @click="addComment()">Submit</a>
+              <br>
             </div>
-          </div>
-          <div class="level-right">
             <div class="level-item">
-              <label class="checkbox">
-                <input type="checkbox"> Press enter to submit
-              </label>
+              <router-link :to="'/questions/'+id">Cancel</router-link>
             </div>
           </div>
         </nav>
@@ -61,5 +58,5 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 </style>

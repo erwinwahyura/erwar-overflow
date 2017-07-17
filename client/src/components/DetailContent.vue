@@ -5,7 +5,7 @@
         <div class="votes">
           <a class="vote-up-off" @click="up"><img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-up-b-128.png" alt="vote-up"></a>
           <div class="score">{{ score }}</div>
-          <a href="" class="vote-down-off" @click="down"><img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-down-b-128.png" alt="vote-up"></a>
+          <a class="vote-down-off" @click="down"><img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-down-b-128.png" alt="vote-up"></a>
         </div>
       </figure>
       <div class="media-content">
@@ -14,7 +14,7 @@
           <p>
             {{ questionDetail.body }}
             <br>
-            <strong> asked by: {{ name }}</strong> <small>@johnsmith</small> <small>31m ago</small>
+            <strong> asked by: {{ name }}</strong>
           </p>
 
         </div>
@@ -30,9 +30,6 @@
               <span class="icon is-small"><i class="fa fa-trash" @click="remove()"></i></span>
             </a>
             <a class="level-item">
-              <span class="icon is-small"><i class="fa fa-heart"></i></span>
-            </a>
-            <a class="level-item">
               <router-link class="icon is-small" :to="'/edit_question/'+questionDetail._id"><i class="fa fa-pencil"></i></router-link>
               <!-- <span class="icon is-small" @click="edit()"><i class="fa fa-pencil"></i></span> -->
             </a>
@@ -42,28 +39,31 @@
           <div class="level-left">
             <router-link class="icon is-small" :to="'/questions/' + id + '/answer'"><i class="fa fa-reply"></i></router-link>
             <router-view></router-view>
-            <a class="level-item">
-              <span class="icon is-small"><i class="fa fa-heart"></i></span>
-            </a>
           </div>
         </nav>
         <!-- answer -->
         <article class="media" v-if="cekAnswerFlag" v-for="(dataAnswer, index) in dataAnswers">
           <figure class="media-left">
             <div class="votes">
-              <a class="vote-up-off" @click="up_answer(dataAnswer._id)"><img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-up-b-128.png" alt="vote-up"></a>
+              <a class="vote-up-off" @click="up_answer(dataAnswer._id, index)"><img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-up-b-128.png" alt="vote-up"></a>
               <!-- <div class="score">{{ scoreAnswer }}</div> -->
-              <div class="score">{{ dataAnswer.upvotes.length - dataAnswer.downvotes.length }}</div>
-              <a href="" class="vote-down-off" @click="down_answer(dataAnswer._id)"><img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-down-b-128.png" alt="vote-up"></a>
+              <div class="score">{{ scoreAnswer }}</div>
+              <a class="vote-down-off" @click="down_answer(dataAnswer._id, index)"><img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-down-b-128.png" alt="vote-up"></a>
             </div>
           </figure>
           <div class="media-content" >
             <div class="content" >
               <!-- <h1>{{ qd.answers }}</h1> -->
               {{ dataAnswer.answerBody }}
-              ini cek id answer : {{dataAnswer._id}}
+              <!-- ini cek id answer : {{dataAnswer._id}} -->
               <br>
-              <strong> answered by: {{ dataAnswer.creator.name }}</strong> <small>@johnsmith</small> <small>31m ago</small>
+              <strong> answered by: {{ dataAnswer.creator.name }}</strong>
+               <!-- ini id si penjawab <strong> answered by: {{ dataAnswer.creator._id }}</strong> -->
+            </div>
+            <div class="level-left" v-if="dataAnswer.creator._id === currentUser">
+              <a class="level-item">
+                <span class="icon is-small"><i class="fa fa-trash" @click="removeAnswer(dataAnswers._id)"></i></span>
+              </a>
             </div>
           </div>
         </article>
@@ -81,10 +81,11 @@ export default {
       name: '',
       idCreator: '',
       flag: false,
-      score: '',
+      score: 0,
       dataAnswers: [],
-      // scoreAnswer: 0,
-      cekAnswerFlag: true
+      scoreAnswer: 0,
+      cekAnswerFlag: true,
+      commentCreator: false
     }
   },
   methods: {
@@ -97,6 +98,7 @@ export default {
         self.name = response.data.creator.name
         self.idCreator = response.data.creator._id
         self.score = response.data.upvotes.length - response.data.downvotes.length
+        // self.scoreAnswer = response.data.answers.upvotes.length - response.data.answers.downvotes.length
       })
       .catch(function (err) {
         console.log(err)
@@ -109,7 +111,7 @@ export default {
       })
       .then(function (response) {
         console.log(response.data)
-        alert('Download Success!')
+        alert('Delete Success!')
         self.$router.push('/')
       })
       .catch(function (err) {
@@ -140,12 +142,23 @@ export default {
     up () {
       var self = this
       this.axios.put('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id + '/upvote', {
-        creator: localStorage.getItem('name')
+        creator: self.currentUser
       }, {
         headers: {token: localStorage.getItem('token')}
       })
       .then((response) => {
-        console.log(response.data)
+        if (self.currentUser) {
+          var idUp = response.data.upvotes.indexOf(self.currentUser)
+          var idDown = response.data.downvotes.indexOf(self.currentUser)
+          if (idUp === -1 && idDown === -1) {
+            response.data.upvotes.push(self.currentUser)
+            self.score = response.data.upvotes.length - response.data.downvotes.length
+          } else if (idDown !== -1) {
+            response.data.downvotes.splice(idDown, 1)
+            self.score = response.data.upvotes.length - response.data.downvotes.length
+          }
+          // this.axios.
+        }
       })
       .catch((err) => {
         console.log(err)
@@ -154,12 +167,23 @@ export default {
     down () {
       var self = this
       this.axios.put('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id + '/downvote', {
-        creator: localStorage.getItem('name')
+        creator: self.currentUser
       }, {
         headers: {token: localStorage.getItem('token')}
       })
       .then((response) => {
         console.log(response.data)
+        if (self.currentUser) {
+          var idUp = response.data.upvotes.indexOf(self.currentUser)
+          var idDown = response.data.downvotes.indexOf(self.currentUser)
+          if (idUp === -1 && idDown === -1) {
+            response.data.downvotes.push(self.currentUser)
+            self.score = response.data.upvotes.length - response.data.downvotes.length
+          } else if (idUp !== -1) {
+            response.data.upvotes.splice(idDown, 1)
+            self.score = response.data.upvotes.length - response.data.downvotes.length
+          }
+        }
       })
       .catch((err) => {
         console.log(err)
@@ -184,13 +208,7 @@ export default {
       var self = this
       this.axios.get('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id)
       .then((response) => {
-        // console.log('ini data =====> ', response.data)
-        // self.dataAnswers = response.data
-        // self.scoreAnswer = (parseInt(response.data.answers.upvotes.length) - parseInt(response.data.answers.downvotes.length))
-        // console.log('ini scoreAnswer ', self.scoreAnswer)
-        console.log('================')
-        console.log(response.data.answers[0].answerBody)
-        console.log('================')
+        console.log(response.data)
       })
       .catch((err) => {
         console.log(err)
@@ -208,6 +226,7 @@ export default {
         console.log(response.data.answers)
         self.dataAnswers = response.data.answers
         console.log('================')
+        // self.$router.push('/questions/' + self.id)
       })
       .catch((err) => {
         console.log(err)
@@ -217,33 +236,82 @@ export default {
         this.cekAnswerFlag = true
       }
     },
-    up_answer (ids) {
+    up_answer (idsAnswer, index) {
       var self = this
-      this.axios.put('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id + '/answer/' + ids + '/upvote', {
-        creator: localStorage.getItem('name')
+      this.axios.put('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id + '/answer/' + idsAnswer + '/upvote', {
+        creator: self.currentUser
       }, {
         headers: {token: localStorage.getItem('token')}
       })
       .then((response) => {
-        console.log(response.data)
+        console.log('log ini dong : ', response.data)
+        console.log('log currentUser : ', self.currentUser)
+        if (self.currentUser) {
+          var idUp = response.data.upvotes.indexOf(self.currentUser)
+          var idDown = response.data.downvotes.indexOf(self.currentUser)
+          console.log('ini idup :', idUp)
+          console.log('ini idDown :', idDown)
+          if (idUp === -1 && idDown === -1) {
+            var a = response.data.upvotes.push(self.currentUser)
+            console.log('hasil push', a)
+            response.data.upvotes.push(self.currentUser)
+            // self.dataAnswers[index].upvotes.push(self.currentUser)
+            self.scoreAnswer = response.data.upvotes.length - response.data.downvotes.length
+          } else if (idDown !== -1) {
+            response.data.downvotes.splice(idDown, 1)
+            // self.dataAnswers[index].downvotes.push(self.currentUser)
+            self.scoreAnswer = response.data.upvotes.length - response.data.downvotes.length
+          }
+          self.getDataAnswer()
+        }
       })
       .catch((err) => {
         console.log(err)
       })
     },
-    down_answer (ids) {
+    down_answer (idsAnswer, index) {
       var self = this
-      this.axios.put('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id + '/answer/' + ids + '/downvote', {
-        creator: localStorage.getItem('name')
+      this.axios.put('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id + '/answer/' + idsAnswer + '/downvote', {
+        creator: self.currentUser
       }, {
         headers: {token: localStorage.getItem('token')}
       })
       .then((response) => {
         console.log(response.data)
+        console.log('log currentUser : ', self.currentUser)
+        if (self.currentUser) {
+          var idUp = response.data.upvotes.indexOf(self.currentUser)
+          console.log('ini idup :', idUp)
+          var idDown = response.data.downvotes.indexOf(self.currentUser)
+          console.log('ini iddown :', idDown)
+          if (idUp === -1 && idDown === -1) {
+            response.data.downvotes.push(self.currentUser)
+            // self.dataAnswers[index].downvotes.push(self.currentUser)
+            self.scoreAnswer = response.data.upvotes.length - response.data.downvotes.length
+          } else if (idUp !== -1) {
+            response.data.upvotes.splice(idDown, 1)
+            // self.dataAnswers[index].upvotes.push(self.currentUser)
+            self.scoreAnswer = response.data.upvotes.length - response.data.downvotes.length
+          }
+          // this.getDataAnswer()
+        }
       })
       .catch((err) => {
         console.log(err)
       })
+    },
+    removeAnswer (idsAnswer) {
+      // var self = this
+      this.axios.delete('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + this.id + '/answer/' + idsAnswer)
+      .then((response) => {
+        alert('delete Success')
+      })
+      .catch((err) => { console.log(err) })
+    }
+  },
+  computed: {
+    currentUser () {
+      return localStorage.getItem('unique')
     }
   },
   created () {

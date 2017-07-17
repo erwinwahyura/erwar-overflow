@@ -1,9 +1,6 @@
 <template lang="html">
-  <div class="home" v-if="islogin">
-    <AllContent></AllContent>
-  </div>
-  <div class="home" v-else>
-    <Signup></Signup>
+  <div class="home">
+    <Signup v-if="!islogin"></Signup>
     <AllContent></AllContent>
   </div>
 </template>
@@ -26,10 +23,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.columns {
-    height: 1000px;
-}
 .home {
-    height: 1000px;
+    min-height: 100vh;
 }
 </style>

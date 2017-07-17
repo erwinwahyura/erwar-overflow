@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <Navbar :islogin="islogin"></Navbar>
-    <!-- <img src="./assets/logo.png"> -->
     <router-view :islogin="islogin"></router-view>
   </div>
 </template>
@@ -18,10 +17,20 @@ export default {
       islogin: false
     }
   },
-  created () {
-    if (localStorage.getItem('token') !== null) {
-      this.islogin = true
+  methods: {
+    checkToken () {
+      if (localStorage.getItem('token') !== null) {
+        this.islogin = true
+      }
     }
+  },
+  watch: {
+    '$route' (to, from) {
+      this.checkToken()
+    }
+  },
+  created () {
+    this.checkToken()
   }
 }
 </script>
