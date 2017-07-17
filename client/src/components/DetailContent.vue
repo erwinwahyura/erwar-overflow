@@ -90,7 +90,7 @@ export default {
   methods: {
     getQuestionById () {
       var self = this
-      this.axios.get('http://localhost:3000/api/questions/' + self.id)
+      this.axios.get('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id)
       .then(function (response) {
         console.log(response.data)
         self.questionDetail = response.data
@@ -104,7 +104,7 @@ export default {
     },
     remove () {
       var self = this
-      this.axios.delete('http://localhost:3000/api/questions/' + self.id, {
+      this.axios.delete('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id, {
         headers: {token: localStorage.getItem('token')}
       })
       .then(function (response) {
@@ -118,7 +118,7 @@ export default {
     },
     checkFlag () {
       var self = this
-      this.axios.get('http://localhost:3000/api/questions/' + self.id)
+      this.axios.get('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id)
       .then(function (response) {
         console.log(response.data)
         // self.questionDetail = response.data
@@ -139,7 +139,7 @@ export default {
     },
     up () {
       var self = this
-      this.axios.put('http://localhost:3000/api/questions/' + self.id + '/upvote', {
+      this.axios.put('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id + '/upvote', {
         creator: localStorage.getItem('name')
       }, {
         headers: {token: localStorage.getItem('token')}
@@ -153,7 +153,7 @@ export default {
     },
     down () {
       var self = this
-      this.axios.put('http://localhost:3000/api/questions/' + self.id + '/downvote', {
+      this.axios.put('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id + '/downvote', {
         creator: localStorage.getItem('name')
       }, {
         headers: {token: localStorage.getItem('token')}
@@ -167,7 +167,7 @@ export default {
     },
     reply () {
       var self = this
-      this.axios.post('http://localhost:3000/api/questions/' + self.id + '/answer/', {
+      this.axios.post('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id + '/answer/', {
         answerBody: self.answer,
         creator: localStorage.getItem('name')
       }, {
@@ -182,7 +182,7 @@ export default {
     },
     getDataAnswer () {
       var self = this
-      this.axios.get('http://localhost:3000/api/questions/' + self.id)
+      this.axios.get('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id)
       .then((response) => {
         // console.log('ini data =====> ', response.data)
         // self.dataAnswers = response.data
@@ -198,7 +198,7 @@ export default {
     },
     cekAnswer () {
       var self = this
-      this.axios.get('http://localhost:3000/api/questions/' + self.id)
+      this.axios.get('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id)
       .then((response) => {
         // console.log('ini data =====> ', response.data)
         // self.dataAnswers = response.data
@@ -219,7 +219,7 @@ export default {
     },
     up_answer (ids) {
       var self = this
-      this.axios.put('http://localhost:3000/api/questions/' + self.id + '/answer/' + ids + '/upvote', {
+      this.axios.put('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id + '/answer/' + ids + '/upvote', {
         creator: localStorage.getItem('name')
       }, {
         headers: {token: localStorage.getItem('token')}
@@ -233,7 +233,7 @@ export default {
     },
     down_answer (ids) {
       var self = this
-      this.axios.put('http://localhost:3000/api/questions/' + self.id + '/answer/' + ids + '/downvote', {
+      this.axios.put('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id + '/answer/' + ids + '/downvote', {
         creator: localStorage.getItem('name')
       }, {
         headers: {token: localStorage.getItem('token')}

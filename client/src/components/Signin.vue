@@ -55,7 +55,7 @@ export default {
   methods: {
     doLogin () {
       var self = this
-      this.axios.post('http://localhost:3000/api/users/signin', {
+      this.axios.post('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/users/signin', {
         username: self.dataUser.username,
         password: self.dataUser.password
       })

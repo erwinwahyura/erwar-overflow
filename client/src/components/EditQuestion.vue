@@ -46,7 +46,7 @@ export default {
   methods: {
     getDataById () {
       var self = this
-      this.axios.get('http://localhost:3000/api/questions/' + self.id)
+      this.axios.get('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id)
       .then(function (response) {
         console.log(response.data)
         self.EditQuestion.title = response.data.title
@@ -59,7 +59,7 @@ export default {
     },
     Edit () {
       var self = this
-      this.axios.put('http://localhost:3000/api/questions/' + self.id, {
+      this.axios.put('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id, {
         title: self.EditQuestion.title,
         body: self.EditQuestion.body,
         creator: localStorage.getItem('name')

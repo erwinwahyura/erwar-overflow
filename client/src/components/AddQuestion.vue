@@ -45,7 +45,7 @@ export default {
   methods: {
     Add () {
       var self = this
-      this.axios.post('http://localhost:3000/api/questions', {
+      this.axios.post('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions', {
         title: self.AddQuestion.title,
         body: self.AddQuestion.body,
         creator: localStorage.getItem('name')

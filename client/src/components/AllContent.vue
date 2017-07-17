@@ -89,7 +89,7 @@ export default {
   methods: {
     getQuestion () {
       var self = this
-      this.axios.get('http://localhost:3000/api/questions/')
+      this.axios.get('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/')
       .then((response) => {
         console.log(response.data)
         self.listQuestion = response.data

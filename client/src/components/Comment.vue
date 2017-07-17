@@ -43,7 +43,7 @@ export default {
     addComment () {
       console.log('idnya ', this.id)
       var self = this
-      this.axios.post('http://localhost:3000/api/questions/' + self.id + '/answer/', {
+      this.axios.post('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id + '/answer/', {
         answerBody: self.answer,
         parent: self.id,
         creator: localStorage.getItem('token')

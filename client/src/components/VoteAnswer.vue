@@ -29,7 +29,7 @@ export default {
   methods: {
     up_answer () {
       var self = this
-      this.axios.put('http://localhost:3000/api/questions/' + self.id + '/upvote', {
+      this.axios.put('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id + '/upvote', {
         creator: localStorage.getItem('name')
       }, {
         headers: {token: localStorage.getItem('token')}
@@ -43,7 +43,7 @@ export default {
     },
     down_answer () {
       var self = this
-      this.axios.put('http://localhost:3000/api/questions/' + self.id + '/downvote', {
+      this.axios.put('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/questions/' + self.id + '/downvote', {
         creator: localStorage.getItem('name')
       }, {
         headers: {token: localStorage.getItem('token')}

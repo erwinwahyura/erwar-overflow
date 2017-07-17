@@ -86,7 +86,7 @@ export default {
   methods: {
     doRegister () {
       var self = this
-      this.axios.post('http://localhost:3000/api/users/signup', {
+      this.axios.post('http://ec2-52-221-213-0.ap-southeast-1.compute.amazonaws.com:3000/api/users/signup', {
         name: self.register.name,
         username: self.register.username,
         email: self.register.email,
